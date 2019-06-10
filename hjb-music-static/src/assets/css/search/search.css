@@ -1,0 +1,138 @@
+html {
+    background-color: #242424;
+}
+.search {
+    color: #969696;
+}
+.search .header {
+    margin-top: -50px;
+    margin-bottom: 10px;
+}
+.search .header .vux-header {
+    background-color: #242424;
+}
+.search .header .vux-header .vux-header-title {
+    margin: 0 50px;
+}
+.search .header .vux-header .vux-header-left {
+    left: 3px;
+}
+.search .header .title-content {
+    margin-top: -2px;
+    margin-left: -10px;
+}
+.search .header #searchText {
+    background-color: #242424;
+    color: #eee;
+    border: 0px;
+    border-bottom: 1px solid #fff;
+    border-radius: 0;
+}
+.search .header .submit {
+    background: url('../../pic/search.png') no-repeat center;
+}
+.search .scroller {
+    /* position: relative; */
+    margin-top: 180px;
+    height: 70% !important;
+}
+.search .searchHistoryTitle {
+    text-align: left;
+    margin-top: 20px;
+}
+.search .searchHistory {
+    width: 100%;
+    float: left;
+    overflow: hidden;
+}
+.search .clearHistory {
+    float: right;
+    width: 20px;
+    height: 20px;
+    background: url('../../pic/clearHistory.png') no-repeat;
+    background-size: 100% 100%;
+}
+.search .searchHistory .historyList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.search .searchHistory li {
+    float: left;
+    margin: 5px;
+    height: 23px;
+    line-height: 23px;
+    background-color: #686868;
+    border-radius: 20px;
+    padding: 0 5px;
+}
+.search .hotSearch {
+    margin-top: 80px;
+}
+.search .hotSearch .hotSearchTitle {
+    text-align: left;
+}
+.search .hotSearch .hotSearchList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.search .hotSearch .hotSearchList li {
+    float: left;
+    margin: 5px;
+    height: 23px;
+    line-height: 23px;
+    background-color: #686868;
+    border-radius: 20px;
+    padding: 0 5px;
+}
+.search .searchResult {
+    width: 100%;
+    height: 600px;
+    margin: 0 auto;
+}
+.search .searchResult .resultList {
+    list-style-type: none;
+    height: 650px;
+    margin-top: 30px;
+    padding: 0 10px;
+}
+.search .searchResult .resultList li {
+    font-size: 100%;
+    font-weight: 400;
+    height: 30px;
+}
+.search .searchResult .resultList li .song {
+    float: left;
+    width: 18px;
+    height: 18px;
+    background: url('../../pic/song.png') no-repeat;
+    background-size: 100% 100%;
+    margin-right: 10px;
+}
+.search .searchResult .resultList li .singer {
+    float: left;
+    width: 18px;
+    height: 18px;
+    background: url('../../pic/singer.png') no-repeat;
+    background-size: 100% 100%;
+    margin-right: 10px;
+}
+.search .searchResult .resultList li .songName {
+    float: left;
+    
+}
+.search .searchResult .resultList li .songName span {
+    overflow: hidden;
+    width: 180px;
+    height: 17px;
+}
+.search .searchResult .resultList li .singerName {
+    float: left;
+    margin-left: 5px;
+}
+.search .searchResult .resultList li .singerName span {
+    overflow: hidden;
+    width: 180px;
+    height: 17px;
+}
