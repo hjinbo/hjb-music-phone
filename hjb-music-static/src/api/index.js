@@ -145,14 +145,44 @@ export function getBanners (type) {
 
 // 获取歌单
 /**
- * limit: 9
- * order: new
+ * tag 标签
  */
-export function getPlayLists (limit, order) {
+export function getPlayLists (tag) {
   return axios.get('/top/playlist', {
     params: {
-      limit: limit,
-      order: order
+      tag: tag
+    }
+  })
+}
+
+// 获取歌手排行榜
+export function getHotSingers () {
+  return axios.get('/top/artists')
+}
+
+// 获取歌单详情
+export function getSongListDetail (songListId) {
+  return axios.get('/playlist/detail', {
+    params: {
+      id: songListId
+    }
+  })
+}
+
+// 排行榜
+export function rank (idx) {
+  return axios.get('/top/list', {
+    params: {
+      idx: idx
+    }
+  })
+}
+
+// 歌手详情
+export function getSingerDetail (singerId) {
+  return axios.get('/artists', {
+    params: {
+      id: singerId
     }
   })
 }

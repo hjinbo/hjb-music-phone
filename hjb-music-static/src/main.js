@@ -7,12 +7,11 @@ import VueScroller from 'vue-scroller'
 import ElementUI from 'element-ui'
 import '../node_modules/element-ui/lib/theme-chalk/index.css'
 import store from './store'
-// import axios from 'axios'
-// import VueAxios from 'vue-axios'
+import VueLazyload from 'vue-lazyload'
 
 Vue.use(ElementUI)
 Vue.use(VueScroller)
-// Vue.use(VueAxios, axios)
+Vue.use(VueLazyload)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

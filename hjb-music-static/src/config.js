@@ -35,7 +35,7 @@ export const VERSION = '0.0.1'
 export const defaultSheetId = 1
 
 // 默认分页数量
-export const defaultLimit = 20
+export const defaultLimit = 30
 
 // 默认背景图
 // export const defaultBG = 'http://cdn.mtnhao.com/music/bg.jpg'
