@@ -6,27 +6,14 @@
             <div class="other-btn">
               <flexbox>
                 <flexbox-item v-for="(flex, index) in flexList" :key="index">
-                  <div class="flexItem"></div>
-                  <div class="flexText">{{ flex }}</div>
+                  <div class="flexItem" v-on:click="itemClick(flex.path)"></div>
+                  <div class="flexText">{{ flex.name }}</div>
                 </flexbox-item>
               </flexbox>
             </div>
             <hr id="divider"/>
             <div class="songList">
-              <div class="songListTitle">推荐歌单</div>
-              <flexbox :gutter="5" orient="vertical">
-                <flexbox-item v-for="(i, index) in songList" :key="index">
-                  <div v-on:click="clickSongList(i.songListId)">
-                    <div class="songListPic">
-                      <img class="pic" v-lazy="i.songListPic" width="60px" height="60px" />
-                    </div>
-                    <div class="songListRight">
-                      <div class="songListName" :title="i.songListName">{{ i.songListName }}</div>
-                      <div class="songListSign" :title="i.songListSign">{{ i.songListSign }}</div>
-                    </div>
-                  </div>
-                </flexbox-item>
-              </flexbox>
+              <SongListList :songList="songList" :title="title"></SongListList>
             </div>
           </div>
         </scroll>
@@ -37,6 +24,7 @@
 import { Swiper, Flexbox, FlexboxItem, Grid, GridItem, GroupTitle, Tabbar, TabbarItem, ViewBox } from 'vux'
 import Scroll from '@/base/scroll/scroll'
 import { getPlayLists, getBanners } from '@/api/index.js'
+import SongListList from '@/base/songListList/songListList'
 
 export default {
   components: {
@@ -49,15 +37,22 @@ export default {
     Tabbar,
     TabbarItem,
     ViewBox,
-    Scroll
+    Scroll,
+    SongListList
   },
   data () {
     return {
       scrollerList: [],
       scrollerIndex: 0,
-      flexList: ['每日推荐', '歌单排行', '发现', 'MV排行'],
+      flexList: [
+        {name: '每日推荐', path: '/'},
+        {name: '推荐歌单', path: '/personalized'},
+        {name: '发现', path: '/'},
+        {name: 'MV排行', path: '/'}
+      ],
       songList: [],
-      curSong: {}
+      curSong: {},
+      title: ''
     }
   },
   created () {
@@ -65,11 +60,8 @@ export default {
     this.loadTop()
   },
   methods: {
-    clickSongList (songListId) {
-      console.log(songListId)
-      this.$store.state.show.showHeader = false
-      sessionStorage.setItem('songListId', songListId)
-      this.$router.push('/songListDetail')
+    itemClick (path) {
+      this.$router.push(path)
     },
     onIndexChange (index) {
       this.scrollerIndex = index
@@ -83,10 +75,10 @@ export default {
             songListId: playLists[i].id,
             songListName: playLists[i].name,
             songListPic: playLists[i].coverImgUrl,
-            songListDesc: playLists[i].description,
-            songListSign: playLists[i].creator.signature
+            songListDesc: playLists[i].description
           })
         }
+        this.title = '网友精选歌单'
         this.songList = list
       })
     },
@@ -108,8 +100,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-@import "@/assets/css/mixin.scss";
+<style scoped lang="css">
 .app {
   width: 100vw;
   height: 83vh;
@@ -131,7 +122,7 @@ export default {
     height: 50px;
     border-radius: 50px;
     margin: 0 auto;
-    background-color: gold;
+    background: linear-gradient(right top, white, gold);
 }
 .index .other-btn .flexText {
     margin: 10px auto;
@@ -141,51 +132,9 @@ export default {
 .index .songList {
     margin: 20px 5px;
 }
-.index .songList .weui-cells__title {
-    text-align: left;
-}
 #divider {
     border-width: 0.5px;
     border-color: #8e8e8e;
     width: 90%;
-}
-.index .songList .songListTitle {
-    // text-align: left;
-    margin: 20px 0;
-    color: gold;
-}
-.index .songList .songListContent {
-    float: left;
-}
-.index .songList .songListPic {
-    width: 60px;
-    height: 60px;
-    float: left;
-    margin-left: 10px;
-}
-.index .songList .songLicPic .pic {
-    margin: 20px auto;
-}
-.index .songList .songListRight {
-    width: 250px;
-    height: 60px;
-    margin: 10px 0;
-    margin-left: 10px;
-    float: left;
-}
-.index .songList .songListRight .songListName {
-    overflow: hidden;
-    color: #fff;
-    height: 15px;
-    line-height: 15px;
-    font-size: 0.8rem;
-}
-.index .songList .songListRight .songListSign {
-    margin-top: 10px;
-    color: rgba(255, 255, 255, 0.3);
-    overflow: hidden;
-    font-size: 0.6rem;
-    height: 15px;
-    line-height: 15px;
 }
 </style>

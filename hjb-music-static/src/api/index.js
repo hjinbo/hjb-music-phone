@@ -1,33 +1,3 @@
-// const prefix = '/api'
-// export const API = {
-//   search: {
-//     /**
-//      * 必选参数 : keywords : 关键词
-//      * 可选参数 :
-//      * limit : 返回数量 , 默认为 30
-//      * offset : 偏移数量，用于分页 , 如 : 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
-//      * type: 搜索类型；默认为 1 即单曲 , 取值意义 : 1: 单曲 10: 专辑 100: 歌手 1000: 歌单 1002: 用户 1004: MV 1006: 歌词 1009: 电台
-//      */
-//     // 调用此接口 , 传入搜索关键词可获得搜索建议 , 搜索结果同时包含单曲 , 歌手 , 歌单 ,mv 信息
-//     SEARCH_SUGGEST: prefix + '/search/suggest',
-//     // 说明 : 调用此接口,可获取热门搜索列表
-//     SEARCH_HOT: prefix + '/search/hot',
-//     // 说明 : 调用此接口 , 传入搜索关键词可以搜索该音乐 / 专辑 / 歌手 / 歌单 / 用户 , 关键词可以多个 , 以空格隔开 , 如 " 周杰伦 搁浅 "( 不需要登录 ), 搜索获取的 mp3url 不能直接用 , 可通过 /song/url 接口传入歌曲 id 获取具体的播放链接
-//     SEARCH_MAIN: prefix + '/search?keywords='
-//   },
-//   music: {
-//     URL: prefix + '/song/url?id=',
-//     LRC: prefix + '/lyric?id=',
-//     DETAIL: prefix + '/song/detail?ids='
-//   },
-//   songList: {
-//     TOP: prefix + '/top/playlist?limit=9&order=new'
-//   },
-//   banner: {
-//     BANNER: prefix + '/banner?type=1'
-//   }
-// }
-
 import axios from 'axios'
 import { URL, defaultLimit } from '@/config'
 
@@ -124,12 +94,24 @@ export function getLyric (id) {
 }
 
 // 获取音乐评论
-export function getComment (id, page, limit = defaultLimit) {
+export function getComments (id, page, limit = defaultLimit) {
   return axios.get('/comment/music', {
     params: {
       offset: page * limit,
       limit: limit,
       id
+    }
+  })
+}
+
+// 给评论点赞
+export function likeComment (resId, commentId, t, type) {
+  return axios.get('/comment/like', {
+    params: {
+      id: resId,
+      cid: commentId,
+      t: t,
+      type: type
     }
   })
 }
@@ -143,7 +125,7 @@ export function getBanners (type) {
   })
 }
 
-// 获取歌单
+// 获取网友精选碟(歌单)
 /**
  * tag 标签
  */
@@ -183,6 +165,85 @@ export function getSingerDetail (singerId) {
   return axios.get('/artists', {
     params: {
       id: singerId
+    }
+  })
+}
+
+// 获得用户信息
+export function getUserDetail (uid) {
+  return axios.get('/user/detail', {
+    params: {
+      uid: uid
+    }
+  })
+}
+
+// 登录
+export function phoneLogin (phone, password) {
+  return axios.get('/login/cellphone', {
+    params: {
+      phone: phone,
+      password: password
+    }
+  })
+}
+
+// 获得用户歌单
+export function getUserPlayList (uid) {
+  return axios.get('/user/playlist', {
+    params: {
+      uid: uid
+    }
+  })
+}
+
+// 获得用户播放记录
+export function getUserRecord (uid, type) {
+  return axios.get('/user/record', {
+    params: {
+      uid: uid,
+      type: type
+    }
+  })
+}
+
+// 获得用户关注列表
+export function getUserFollows (uid) {
+  return axios.get('/user/follows', {
+    params: {
+      uid: uid
+    }
+  })
+}
+
+// 获得用户粉丝列表
+export function getUserFolloweds (uid) {
+  return axios.get('/user/followeds', {
+    params: {
+      uid: uid
+    }
+  })
+}
+
+// 推荐歌单
+export function personalized () {
+  return axios.get('/personalized')
+}
+
+// 获取用户关注列表
+export function getFollows (uid) {
+  return axios('/user/follows', {
+    params: {
+      uid: uid
+    }
+  })
+}
+
+// 获取被关注用户列表
+export function getFolloweds (uid) {
+  return axios.get('/user/followeds', {
+    params: {
+      uid: uid
     }
   })
 }

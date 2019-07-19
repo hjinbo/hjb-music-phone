@@ -14,14 +14,16 @@
             </div>
         </div>
         </scroll>
-        <toast v-model="this.showTip" type="text" width="20em">{{ this.tipText }}</toast>
+        <toast v-model="showTip" type="text" width="20em">{{ this.tipText }}</toast>
     </div>
 </template>
 
 <script>
 import { XHeader, LoadMore, Toast } from 'vux'
-import { getMusicDetail, getLyric, getMusicUrl } from '@/api/index.js'
+// import { getMusicDetail, getLyric, getMusicUrl } from '@/api/index.js'
+import { getSongParam } from '@/api/play'
 import Scroll from '@/base/scroll/scroll'
+// import { ERR_OK } from '@/api/config'
 
 export default {
   components: {
@@ -33,7 +35,7 @@ export default {
   data () {
     return {
       showTip: false,
-      tipText: '歌曲播放失败'
+      tipText: ''
     }
   },
   props: {
@@ -48,49 +50,8 @@ export default {
     }
   },
   methods: {
-    choose (id) {
-      var songUrl = ''
-      var songLrc = ''
-      var songName = ''
-      var singerName = ''
-      var songAlbum = ''
-      var songPic = ''
-      var songId = id
-      getMusicDetail(songId).then((response) => {
-        if (response.data.code !== 200) {
-          this.showTip = true
-          return
-        }
-        var song = response.data.songs[0]
-        songName = song.name
-        for (var i = 0; i < song.ar.length; i++) {
-          singerName += song.ar[i].name + '&'
-        }
-        if (singerName.length > 0) {
-          singerName = singerName.substring(0, singerName.length - 1)
-        }
-        songAlbum = song.al
-        songPic = song.al.picUrl
-        getMusicUrl(songId).then((response) => {
-          var song = response.data.data[0]
-          songUrl = song.url
-          getLyric(songId).then((response) => {
-            songLrc = response.data.lrc
-            var param = {
-              songName: songName,
-              songAlbum: songAlbum,
-              singerName: singerName,
-              songPic: songPic,
-              songUrl: songUrl,
-              songLrc: songLrc
-            }
-            // 将获取到的信息保存在vuex中
-            this.$store.dispatch('setCurrentSongFun', param)
-            this.$store.state.show.showMusicBar = true
-            this.$store.state.currentSong.isPlaying = true
-          })
-        })
-      })
+    choose (songId) {
+      getSongParam(songId)
     },
     songListBack () {
       this.$emit('back')

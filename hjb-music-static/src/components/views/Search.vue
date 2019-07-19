@@ -1,5 +1,6 @@
 <template>
     <div class="search">
+        <toast v-model='showTip' type='text' width='20em'>{{ this.tipText }}</toast>
         <div class="title-content" slot="">
           <el-input id="searchText"
               v-model="searchText"
@@ -32,7 +33,7 @@
           <scroll :data="searchResultList" ref="scroll">
             <div>
               <ul class="resultList">
-                <li v-for="(res, index) in searchResultList" :key="index" v-on:click="choose(res.songId, res.type)">
+                <li v-for="(res, index) in searchResultList" :key="index" v-on:click="choose(res.songId)">
                   <div :class="res.type"></div>
                   <div class="songName" v-show="res.type === 'song'">
                     <span>{{ res.songName }} -</span>
@@ -49,17 +50,21 @@
 </template>
 
 <script>
-import { LoadMore } from 'vux'
+import { LoadMore, Toast } from 'vux'
 import Scroll from '@/base/scroll/scroll'
-import BScroll from 'better-scroll'
-import { search, searchHot, getMusicDetail, getMusicUrl, getLyric } from '@/api/index.js'
+import BScroll from 'better-scroll' // 横向滚动
+import { search, searchHot } from '@/api/index.js'
 import MusicBar from './MusicBar'
+// import { ERR_OK } from '@/api/config'
+// import { getMusicDetail, getMusicUrl, getLyric } from '@/api/index'
+import { getSongParam } from '@/api/play'
 
 export default {
   components: {
     Scroll,
     LoadMore,
-    MusicBar
+    MusicBar,
+    Toast
   },
   data () {
     return {
@@ -69,7 +74,9 @@ export default {
       searchResultList: [],
       hotSearchList: null,
       showResult: false,
-      showOther: true
+      showOther: true,
+      showTip: false,
+      tipText: ''
     }
   },
   created () {
@@ -108,14 +115,7 @@ export default {
       })
     },
     getHistory () {
-      this.searchHistoryList = [
-        {'history': '独家记忆'},
-        {'history': 'you are not alone'},
-        {'history': '十年'},
-        {'history': '周杰伦'},
-        {'history': 'love to be loved by you'},
-        {'history': 'you are not alone'}
-      ]
+      this.searchHistoryList = this.$store.state.searchHisList
     },
     search (text) {
       search(text).then((response) => {
@@ -124,55 +124,17 @@ export default {
       })
     },
     clearHistory () {
-      console.log('clear history')
-      this.searchHistoryList = []
+      // this.searchHistoryList = []
+      this.$store.state.searchHisList = []
     },
-    choose (id, type) {
-      if (type === 'song') {
-        console.log('you click a song')
-        var songUrl = ''
-        var songLrc = ''
-        var songName = ''
-        var singerName = ''
-        var songAlbum = ''
-        var songPic = ''
-        var songId = id
-        getMusicDetail(songId).then((response) => {
-          var song = response.data.songs[0]
-          songName = song.name
-          for (var i = 0; i < song.ar.length; i++) {
-            singerName += song.ar[i].name + '&'
-          }
-          if (singerName.length > 0) {
-            singerName = singerName.substring(0, singerName.length - 1)
-          }
-          songAlbum = song.al
-          songPic = song.al.picUrl
-          getMusicUrl(songId).then((response) => {
-            var song = response.data.data[0]
-            songUrl = song.url
-            getLyric(songId).then((response) => {
-              songLrc = response.data.lrc
-              var param = {
-                songName: songName,
-                songAlbum: songAlbum,
-                singerName: singerName,
-                songPic: songPic,
-                songUrl: songUrl,
-                songLrc: songLrc
-              }
-              // 将获取到的信息保存在vuex中
-              this.$store.dispatch('setCurrentSongFun', param)
-              this.searchResultList = []
-              this.$store.state.show.showMusicBar = true
-              this.$store.state.currentSong.isPlaying = true
-              this.searchText = ''
-            })
-          })
-        })
-      } else if (type === 'singer') {
-        console.log('you click a singer')
-      }
+    choose (songId) {
+      var getSongParamResult = getSongParam(songId)
+      // if (getSongParamResult.errorNo !== ERR_OK) {
+      // this.showTip = true
+      // this.tipText = getSongParamResult.errorNo + ':' + getSongParamResult.errorInfo
+      console.log(getSongParamResult.errorNo + ':' + getSongParamResult.errorInfo)
+      // }
+      this.searchText = ''
     },
     setSearchResult (result, num) {
       var list = []
@@ -200,12 +162,12 @@ export default {
         var songPic = ''
         var songId = song.id
         list.push({
-          'songId': songId,
-          'songName': songName,
-          'singerName': singerName,
-          'songAlbum': songAlbum,
-          'songPic': songPic,
-          'type': type
+          songId: songId,
+          songName: songName,
+          singerName: singerName,
+          songAlbum: songAlbum,
+          songPic: songPic,
+          type: type
         })
       }
       this.searchResultList = list

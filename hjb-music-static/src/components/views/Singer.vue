@@ -4,7 +4,7 @@
             <div>
                 <div v-for="(singer, index) in singerList" :key="index" @click="choose(singer.singerId)" class="singerLine">
                     <div class="singerPic">
-                        <img v-lazy="singer.singerPic" width="60px" height="60px" style="border-radius: 60px;">
+                        <img class="singerImg" v-lazy="singer.singerPic" width="60px" height="60px"/>
                     </div>
                     <div class="singerName">{{ singer.singerName }}</div>
                 </div>
@@ -52,8 +52,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@import "@/assets/css/mixin.scss";
+<style lang="css" scoped>
 .singerList .app {
     width: 100vw;
     height: 83vh;
@@ -67,6 +66,11 @@ export default {
 .singerList .singerPic {
     margin-left: 20px;
     float: left;
+}
+.singerList .singerPic .singerImg {
+    border-radius: 60px;
+    background: url('../../assets/pic/loading.gif') no-repeat;
+    background-size: 100% 100%;
 }
 .singerList .singerName {
     width: 60%;

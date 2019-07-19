@@ -39,8 +39,8 @@ export default {
           this.tipText = '获取歌单失败'
           return
         }
-        var sign = response.data.playlist.creator.signature
-        var backgroundUrl = response.data.playlist.creator.backgroundUrl
+        var sign = response.data.playlist.name
+        var backgroundUrl = response.data.playlist.coverImgUrl
         var tracks = response.data.playlist.tracks
         var list = []
         for (var i = 0; i < tracks.length; i++) {
@@ -66,7 +66,7 @@ export default {
     },
     songListBack () {
       this.$store.state.show.showHeader = true
-      this.$router.push('/recommand')
+      this.$router.history.go(-1)
     }
   }
 }
