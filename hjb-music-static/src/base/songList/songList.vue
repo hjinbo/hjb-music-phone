@@ -1,29 +1,30 @@
 <template>
     <div class="songList">
-        <x-header class="header" :left-options="{backText: '', preventGoBack: true}" @on-click-back="songListBack">{{ headerName }}</x-header>
+        <toast v-model="showTip" type="text" width="20em">{{ this.tipText }}</toast>
+        <x-header class="header" :left-options="{backText: '', preventGoBack: true}" @on-click-back="songListBack">{{ this.headerName }}</x-header>
         <div class="bgImageBack"></div>
         <div class="bgImage" :style="bgStyle"></div>
-        <load-more v-if="songList.length > 0 ? 0 : 1"></load-more>
-        <scroll class="app" :data="songList" ref="scroll">
-        <div class="ulDiv">
-            <div v-for="(song, index) in songList" :key="index" class="songLine" @click="choose(song.songId)">
-            <div class="songName">{{ song.songName }}</div>
-            <div class="singerAndAlbum">
-                {{ song.singerName }}&nbsp;-&nbsp;{{ song.songAlbum }}
+        <load-more v-if="songList.length === 0"></load-more>
+        <div class="body">
+          <div class="playAll" v-on:click="playAll">播放全部</div>
+          <scroll class="app" :data="songList">
+            <div class="ulDiv">
+                <div v-for="(song, index) in songList" :key="index" class="songLine" @click="choose(song.songId)">
+                <div class="songName">{{ song.songName }}</div>
+                <div class="singerAndAlbum">
+                    {{ song.singerName }}&nbsp;-&nbsp;{{ song.songAlbum }}
+                </div>
+                </div>
             </div>
-            </div>
+          </scroll>
         </div>
-        </scroll>
-        <toast v-model="showTip" type="text" width="20em">{{ this.tipText }}</toast>
     </div>
 </template>
 
 <script>
 import { XHeader, LoadMore, Toast } from 'vux'
-// import { getMusicDetail, getLyric, getMusicUrl } from '@/api/index.js'
 import { getSongParam } from '@/api/play'
 import Scroll from '@/base/scroll/scroll'
-// import { ERR_OK } from '@/api/config'
 
 export default {
   components: {
@@ -55,6 +56,11 @@ export default {
     },
     songListBack () {
       this.$emit('back')
+    },
+    playAll () {
+      for (var i = 0; i < this.songList.length; i++) {
+        getSongParam(this.songList[i].songId)
+      }
     }
   },
   computed: {
@@ -65,15 +71,21 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-@import "../../assets/css/mixin.scss";
+<style scoped lang="css">
+.body {
+    margin-top: 40vh;
+}
+.body .playAll {
+    height: 25px;
+    line-height: 25px;
+    color: gold;
+    text-align: center;
+    margin: 5px 0;
+}
 .app {
     width: 100vw;
-    height: 55vh;
+    height: 42vh;
     overflow: hidden;
-    position: relative;
-    z-index: 20;
-    margin-top: 30vh;
 }
 .songList .header {
     margin-bottom: 0px;
@@ -84,7 +96,7 @@ export default {
 }
 .songList .bgImageBack {
     width: 100%;
-    height: 35vh;
+    height: 45vh;
     background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     top: 0px;
@@ -92,7 +104,7 @@ export default {
 }
 .songList .bgImage {
     width: 100%;
-    height: 35vh;
+    height: 45vh;
     background: no-repeat;
     background-size: 100% 100%;
     position: absolute;
@@ -101,15 +113,12 @@ export default {
 }
 .songList .ulDiv {
     background-color: #242424;
-    // border-top-left-radius: 50px;
-    // border-top-right-radius: 50px;
     padding-top: 1px;
-    // height: 70vh;
 }
 .songList .ulDiv .songLine {
     color: #fff;
     margin-top: 20px;
-    padding: 0 20px;
+    padding: 0 10px;
 }
 .songList .ulDiv .songLine .songName {
     text-align: left;

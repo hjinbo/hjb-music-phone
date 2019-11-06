@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <scroll :data="this.$store.state.vPlayList" class="playListApp">
+    <div class="playList">
+        <scroll :data="this.$store.state.vPlayList" class="app">
             <div>
                 <div style="height: 10px;"></div>
                 <div class="line" v-for="(song, index) in this.$store.state.vPlayList" :key="index">
@@ -66,50 +66,53 @@ export default {
 }
 </script>
 <style scoped>
-.playListApp {
+.playList .app {
     width: 100vw;
     height: 53vh;
     overflow: hidden;
 }
-.playListApp {
+.playList .app {
     background-color: #4b4b4b;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 10px 0;
 }
-.playListApp .line {
+.playList .app .line {
     color: #eee;
     height: 30px;
     margin: 15px auto;
     width: 90%;
 }
-.playListApp .line .playPic {
+.playList .app .line .playPic {
     width: 16px;
     height: 16px;
     display: block;
     float: left;
 }
-.playListApp .line .songName {
+.playList .app .line .songName {
     display: block;
     float: left;
-    width: 150px;
+    width: 40vw;
     height: 20px;
     line-height: 20px;
     overflow: hidden;
     text-align: left;
     margin-left: 15px;
 }
-.playListApp .line .singerName {
+.playList .app .line .singerName {
     display: block;
     float: left;
     height: 20px;
-    width: 120px;
+    width: 35vw;
     line-height: 20px;
     overflow: hidden;
     text-align: left;
 }
-.playListApp .line .remove {
+.playList .app .line .remove {
     display: block;
     float: right;
+    position: relative;
+    top: 2px;
+
 }
 </style>

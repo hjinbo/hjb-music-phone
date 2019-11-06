@@ -159,9 +159,11 @@ export default {
 }
 .commentsDiv .comment .date {
     float: left;
+    font-size: 2vh;
 }
 .commentsDiv .comment .likedCount {
     float: right;
+    font-size: 2vh;
 }
 .commentsDiv .comment .likedCount .likeIcon {
     background: url('../../assets/pic/playbar.png') no-repeat;
@@ -169,7 +171,9 @@ export default {
     height: 20px;
     background-position: -95px -505px;
     float: left;
-    margin-right: 2px;
+    transform: scale(0.8);
+    position: relative;
+    top: -1px;
 }
 .commentsDiv .comment .likedCount .likeSuccess {
     background-position: -95px -535px;

@@ -3,9 +3,10 @@
     <div class='songDetail' v-show='fullScreen' ref='songDetail'>
       <div class='fullScreenBg' :style='bgStyle'></div>
       <h2 class='header'>
-        <span class="smaller" v-on:click="smaller"></span>{{ this.$store.state.currentSong.songName }}
+        <span class="smaller" v-on:click="smaller"></span>
+        <div class="headerName">{{ this.$store.state.currentSong.songName }}</div>
       </h2>
-      <p class='singerName'>{{ this.$store.state.currentSong.singerName }}</p>
+      <div class='singerName'>{{ this.$store.state.currentSong.singerName }}</div>
       <div v-show='!showCom'>
         <Scroll :data="lyricList" ref="lyricList" class="app lyricDiv">
           <div>
@@ -67,11 +68,14 @@
       @timeupdate="timeUpdate" @ended="songEnd"></audio>
     <div class='mini' v-show='!fullScreen'>
         <div class='musicBar'>
-          <transition name="list-fade">
-            <div v-show="showPlayList" class="playList">
+          <!-- <transition name="list-fade">
+            <div v-show="showPlayList" class="playListDiv">
               <PlayList></PlayList>
             </div>
-          </transition>
+          </transition> -->
+          <popup v-model="showPlayList" position="bottom" max-height="50%" class="playListDiv">
+            <PlayList></PlayList>
+          </popup>
           <tabbar>
             <div class='songPic' v-on:click='showLyric' :style='bgStyle'></div>
             <div class='songName' v-on:click='showLyric'>{{ this.$store.state.currentSong.songName }}</div>
@@ -94,7 +98,7 @@
 </template>
 
 <script>
-import { XHeader, Tabbar, TabItem, Flexbox, FlexboxItem, Toast, Swiper, SwiperItem } from 'vux'
+import { XHeader, Tabbar, TabItem, Flexbox, FlexboxItem, Toast, Swiper, SwiperItem, Popup } from 'vux'
 import Scroll from '@/base/scroll/scroll'
 import { timeStr2Second } from '@/api/play'
 import { getMusicUrl } from '@/api/index'
@@ -114,7 +118,8 @@ export default {
     SwiperItem,
     Scroll,
     Comments,
-    PlayList
+    PlayList,
+    Popup
   },
   data () {
     return {
@@ -339,12 +344,12 @@ export default {
 
 <style scoped>
 .musicBar .weui-tabbar {
-    position: fixed !important;
+    position: fixed;
     left: 0px;
     width: 100%;
     height: 50px;
     z-index: 500;
-    background-color: #383838 !important;
+    background-color: #383838;
     border-top: 0.5px solid #383838;
 }
 .musicBar .weui-tabbar .songPic {
@@ -391,7 +396,7 @@ export default {
 }
 .musicBar .weui-tabbar .play .switch {
     position: absolute;
-    right: 0px;
+    right: 1px;
     top: 0px;
     width: 30px;
     height: 30px;
@@ -401,7 +406,7 @@ export default {
 }
 .musicBar .weui-tabbar .play .pause {
     position: absolute;
-    right: 1px;
+    right: 1.7px;
     top: 0px;
     width: 30px;
     height: 30px;
@@ -423,6 +428,15 @@ export default {
 }
 .songDetail .header {
     color: #eee;
+    margin: 2vh 0;
+}
+.songDetail .header .headerName {
+    width: 90%;
+    text-align: center;
+    overflow: hidden;
+    height: 25px;
+    line-height: 25px;
+    margin: 0 auto;
 }
 .songDetail .header .smaller {
     width: 32px;
@@ -459,6 +473,9 @@ export default {
 .singerName {
     color: #eee;
     overflow: hidden;
+    height: 3vh;
+    line-height: 3vh;
+    margin: 1vh 0;
 }
 .app {
     width: 100vw;
@@ -489,8 +506,7 @@ export default {
 }
 .operator {
     width: 100%;
-    height: 100px;
-    /* background-color: #242424; */
+    height: 13vh;
 }
 .operator .loop {
     width: 28px;
@@ -559,10 +575,12 @@ export default {
     position: relative;
     z-index: 1000;
 }
-.playList {
+.playListDiv {
     position: fixed;
     bottom: 50px;
     z-index: 1200;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 .list-fade-enter {
   transform: translate3d(0, 100%, 0);
